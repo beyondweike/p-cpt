@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteBase /
+RewriteRule ^(.*)article/id/(.+)\.html$ $1/reading/admin/viewArticle.php?id=$2
+RewriteRule ^(.*)article/ul/(.+)\.html$ $1/reading/admin/viewArticle.php?url=$2

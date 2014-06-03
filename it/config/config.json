@@ -1,0 +1,8 @@
+{
+    "version":1.11,
+ 	"resourceVersion":1.0,
+	"softUpdate":{"showAlert":0,"title":"有新版本v1.11","message":"1.修改列表数据更新机制;\r\n2.消除可能出现的服务连接问题;\r\n3.修正其它bug;"},
+	
+	"showAd":0,
+	"signature":""
+}
