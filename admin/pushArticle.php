@@ -49,7 +49,7 @@
 
 	$con=dbConnect();
 	//test
-	//$devices=Device::queryTestRecords();
+	//$devices=Device::queryTestRecordsFromRecordId($deviceRecordId,$pageSize,$serviceCode);
 	$devices=Device::queryFromRecordId($deviceRecordId,$pageSize,$serviceCode);
 	$item=Item::queryItemById($articleId,$tableName);
 	dbClose($con);

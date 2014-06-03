@@ -44,9 +44,8 @@
             if ($ret)
             {
 				//date_default_timezone_set('Asia/Shanghai');
-			 	//$filePathName="../logs/push_log_".date("Y-m-d",time()).".log";
+				//$filePathName="../logs/push_log_".date("Y-m-d",time()).".log";
 				//log2File($filePathName,$ret." :: ".strlen($msg)." :: ".$payload." :: ".$msg);
-				
                 $successCount++;
 				$device->pushState=1;
             }

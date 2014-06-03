@@ -53,8 +53,8 @@
 			 }
 			 else
              {
-                 $sql="INSERT INTO device_table(deviceId,deviceToken,lastVisitTime,apnsEnable,serviceCode,pushState) ".
-                     " VALUES('".$this->deviceId."', '".$this->deviceToken."', '".$this->lastVisitTime."', ".$this->apnsEnable.",".$this->serviceCode.",0)";
+                 $sql="INSERT INTO device_table(deviceId,deviceToken,lastVisitTime,apnsEnable,serviceCode,pushState,isDevelop) ".
+                     " VALUES('".$this->deviceId."', '".$this->deviceToken."', '".$this->lastVisitTime."', ".$this->apnsEnable.",".$this->serviceCode.",0,0)";
                  $ret=mysql_query($sql);
                  $this->id=mysql_insert_id();
              }
@@ -69,7 +69,27 @@
 		 {
 			 $arr = array();
 			 
-			 $sql="select id,deviceToken from device_table where id>=".$deviceRecordId." and serviceCode=".$serviceCode.
+			 $sql="select id,deviceToken from device_table where isDevelop=0 and id>=".$deviceRecordId." and serviceCode=".$serviceCode.
+			      " and pushState=0 order by id asc limit 0,".$pageSize;
+             $result = mysql_query($sql);
+             while($row = mysql_fetch_array($result))
+             {
+                 $device=new Device();
+				 
+				 $device->id = $row['id'];
+				 $device->deviceToken = $row['deviceToken'];
+			
+				 $arr[]=$device;
+             }
+			 
+			 return $arr;
+		 }
+		 
+		 public static function queryTestRecordsFromRecordId($deviceRecordId,$pageSize,$serviceCode)
+		 {
+			 $arr = array();
+			 //'A4BED515-D83C-4754-8A75-96A63AA6E7CD'
+			 $sql="select id,deviceToken from device_table where isDevelop=0 and deviceId in('38BBC094-B2D7-47C2-A0C5-9FB0E24714DF') and id>=".$deviceRecordId." and serviceCode=".$serviceCode.
 			      " and pushState=0 order by id asc limit 0,".$pageSize;
              $result = mysql_query($sql);
              while($row = mysql_fetch_array($result))
