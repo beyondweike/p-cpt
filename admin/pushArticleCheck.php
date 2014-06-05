@@ -28,34 +28,44 @@
 		echo "非法articleId";
 		return;
 	}
-
-	$con=dbConnect();
-	$pushable=Push::checkPushable($articleId,$hours,$message);
-	if($pushable)
-	{
-		$item=Item::queryItemById($articleId,$tableName);
-		$msgLength=0;
-		$pushable=isItemPushable($item,$msgLength);
-		if(!$pushable)
-		{
-			$message="文章推送验证失败 ".$msgLength;
-		}
-	}
 	
+	date_default_timezone_set('Asia/Shanghai');
+	$hour=date("H",time());//"Y-m-d H:i:s"
+	$pushable=$hour>=6 && $hour<=21;
 	if($pushable)
-	{
-		$pushRecordId=Push::insertPushRecordToDatabase($articleId);
-		if($pushRecordId>0)
+	{		 
+		$con=dbConnect();
+		$pushable=Push::checkPushable($articleId,$hours,$message);
+		if($pushable)
 		{
-			Device::updateAllPushState(0);
+			$item=Item::queryItemById($articleId,$tableName);
+			$msgLength=0;
+			$pushable=isItemPushable($item,$msgLength);
+			if(!$pushable)
+			{
+				$message="文章推送验证失败 ".$msgLength;
+			}
 		}
-		else
+		
+		if($pushable)
 		{
-			$pushable=false;
+			$pushRecordId=Push::insertPushRecordToDatabase($articleId);
+			if($pushRecordId>0)
+			{
+				Device::updateAllPushState(0);
+			}
+			else
+			{
+				$pushable=false;
+			}
 		}
+		
+		dbClose($con);
 	}
-	
-	dbClose($con);
+	else
+	{
+		$message="未在推送时间段（6:00-21:00）";
+	}
 	
 	if($pushable)
 	{

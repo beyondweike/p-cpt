@@ -106,5 +106,20 @@
 
 			return $items;
 		 }
+		 
+		 public static function queryLastPushRecord()
+		 {
+			$sql="SELECT * FROM push_table order by id desc limit 0,1".
+			
+			$item=NULL;
+			$result = mysql_query($sql);
+			if($row = mysql_fetch_array($result))
+			{
+			  $item=new Push();
+			  $item->parseRow($row);
+			}
+
+			return $item;
+		 }
     }
 ?>

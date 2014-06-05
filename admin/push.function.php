@@ -99,7 +99,7 @@
 		// Create the payload body
 		$body['aps'] = array('alert' => $item->title,'badge' => 1,'sound' => 'default');
 		$body['type'] = 0 ;
-		$body['article'] = array('id' => $item->id,'catecode' => $item->categoryCode,'time' => $item->datetime);//,'title' => $item->title
+		$body['article'] = array('id' => $item->id,'catecode' => $item->categoryCode,'time' => $item->datetime);
 			
 		 // Encode the payload as JSON
 		$payload = json_encode($body,JSON_UNESCAPED_UNICODE);
