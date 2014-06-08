@@ -21,7 +21,7 @@
 	}
 
 	$ret=0;
-	$id=0;
+	$itemId=0;
 
 	if (isset($_POST['href']))
 	{
@@ -35,24 +35,33 @@
         $item=new Item();
         $item->href=$href;
         $item->title=$title;
-        $item->serviceCode=$productCode;
-		$valid=$item->preproccessValues();
-		if($valid)
-		{
-			$service=Service::getService($productCode);
-        	$categoriesPath="../".$service->dir."/".Properties::getRelativeCategoriesPath();
+		$item->categoryCode=$categoryCode;
 		
-			$categoryPriorityDic=array();
-			$rootCategory=new Category();
-			$rootCategory->parsePath($categoriesPath);
-			$rootCategory->getCategoryPriorityDic($categoryPriorityDic);
+		$itemId=Item::queryIdByHref($href,$tableName);
+		if($itemId<=0)
+		{
+			$valid=$item->preproccessValues();
+			if($valid)
+			{
+				$service=Service::getService($productCode);
+				$categoriesPath="../".$service->dir."/".Properties::getRelativeCategoriesPath();
 			
-			$ret=$item->insertItemToDatabase($tableName,$categoryPriorityDic);
-			$itemId=$item->id;
+				$categoryPriorityDic=array();
+				$rootCategory=new Category();
+				$rootCategory->parsePath($categoriesPath);
+				$rootCategory->getCategoryPriorityDic($categoryPriorityDic);
+				
+				$ret=$item->insertItemToDatabase($tableName,$categoryPriorityDic);
+				$itemId=$item->id;
+			}
+		}
+		else
+		{
+			$ret=true;
 		}
         
         dbClose($con);
     }
 
-	echo json_encode(array('success'=>$ret,'itemId'=>$itemId,'message'=>""));
+	echo json_encode(array('success'=>$ret?1:0,'itemId'=>$itemId,'message'=>""));
 ?>

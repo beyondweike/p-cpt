@@ -6,6 +6,7 @@
 	class Item
 	{
 		var $id=0;
+		var $articleId=0;
 		var $title="";
 		var $datetime="";
 		var $href="";
@@ -21,13 +22,13 @@
 		function parseRow($row)
 		{ 
 			$this->id = $row['id'];
+			$this->articleId = $this->id;
 			$this->datetime = $row['datetime'];
 			$this->title =$row['title'];
 			$this->href = stripslashes($row['href']);
 			$this->thumbnailUrl = $row['thumbnailUrl'];
 			$this->categoryCode = $row['categoryCode'];
             $this->briefDesc = $row['briefDesc'];
-			$this->readTimes = $row['readTimes'];
 			$this->commentCount = $row['commentCount'];
 			$this->shareTimes = $row['shareTimes'];
 			
@@ -43,6 +44,7 @@
 		{
 			$paris=array();
 			$paris[]=jsonEncodeKeyNumberPair("id",$this->id);
+			$paris[]=jsonEncodeKeyNumberPair("articleId",$this->articleId);
 			$paris[]=jsonEncodeKeyStringPair("title",$this->title);
 			$paris[]=jsonEncodeKeyStringPair("datetime",$this->datetime);
 			$paris[]=jsonEncodeKeyStringPair("href",$this->href);
@@ -123,6 +125,7 @@
 			//warning. make sure href,title field enough long.   vchar 300
 			 $existsId=-1;
              $existsCategoryCode=-1;
+			 $result=false;
 			 
 			 $exists=$this->checkItemExists($tableName,$existsId,$existsCategoryCode);
 			 
@@ -145,7 +148,15 @@
 				 {
 					 $existsId=$rows[0];
 					 $existsCategoryCode=$rows[1];
+					 
+					 $this->id=$existsId;
+					 $this->categoryCode=$existsCategoryCode;
 				 }
+			 }
+			 else
+			 {
+				 $this->id=$existsId;
+				 $this->categoryCode=$existsCategoryCode;
 			 }
 
 			 if($existsId<0)
@@ -153,20 +164,17 @@
                  $sql="INSERT INTO ".$tableName."(title,href,datetime,thumbnailUrl,briefDesc,categoryCode,tags) ".
 				 " VALUES('".$this->title."', '".$this->href."', '".$this->datetime."', '".$this->thumbnailUrl."', '".$this->briefDesc."', ".$this->categoryCode.", '')";
                  
-                 //test
-                 //echo $sql;
-                 //echo "<br>";
-                 
 				 $result=mysql_query($sql);
-				 
-				 //echo "insert: ".$result?"1":"0";
-                 //echo "<br><br><br><br><br>";
                  
                  if($result===false)
                  {
 					date_default_timezone_set('Asia/Shanghai');//'Asia/Shanghai'   亚洲/上海
 			 		$filePathName="../logs/sql_error_".date("Y-m-d",time()).".log";
 					log2File($filePathName,$sql."\n".mysql_error());//die(mysql_error());
+                 }
+				 else
+                 {
+					$this->id=mysql_insert_id();
                  }
 			 }
              else if($existsCategoryCode!=$this->categoryCode && $categoryPriorityDic
@@ -251,12 +259,17 @@
 			//return $ret;
 		 }
         
-        public static function addOneReadTimes($articleId,$tableName)
+		public static function addReadTimes($articleId,$readTimes,$tableName)
         {
-            $sql="update ".$tableName." set readTimes=readTimes+1 where id=".$articleId;
+            $sql="update ".$tableName." set readTimes=readTimes+".$readTimes." where id=".$articleId;
             $ret=mysql_query($sql);
             
             return $ret;
+        }
+		
+        public static function addOneReadTimes($articleId,$tableName)
+        {
+            return Item::addReadTimes($articleId,1,$tableName);
         }
 		
 		public static function addOneCommentCount($articleId,$tableName)
@@ -296,6 +309,21 @@
 			}
 
 			return $href;
+		 }
+		 
+		 public static function queryIdByHref($href,$tableName)
+		 {
+            $id=0;
+			
+			$sql="SELECT id FROM ".$tableName." where href='".$href."'";
+
+			$result=mysql_query($sql);
+			if($rows = mysql_fetch_array($result))
+			{
+				$id=$rows[0];
+			}
+
+			return $id;
 		 }
 		 
 		 public static function queryStatistics($articleId,$tableName,&$readTimes,&$commentCount,&$shareTimes)
@@ -500,6 +528,7 @@
 			{
                 $item=new Item();
                 $item->parseRow($row);
+				$item->readTimes = $row['readTimes'];
                 
                 if(!$arr)
                 {
@@ -517,6 +546,9 @@
         {
 			$arr = NULL;
             
+			date_default_timezone_set('Asia/Shanghai');
+			$theDate=date("Y-m-d",strtotime("-1 week"));
+			
 			$sql="";
 			if($topItemId>0)
 			{
@@ -529,11 +561,11 @@
                 }
                 
                 //readTimes>=".$readTimes." and
-				$sql="SELECT * FROM ".$tableName." where readTimes*10000000+id>".($readTimes*10000000+$topItemId)." order by readTimes desc,id desc limit 0,".$pageSize;
+				$sql="SELECT * FROM ".$tableName." where datetime>='".$theDate."' and readTimes*10000000+id>".($readTimes*10000000+$topItemId)." order by readTimes desc,id desc limit 0,".$pageSize;
 			}
 			else
 			{
-				$sql="SELECT * FROM ".$tableName." where readTimes>0 order by readTimes desc,id desc limit 0,".$pageSize;
+				$sql="SELECT * FROM ".$tableName." where datetime>='".$theDate."' and readTimes>0 order by readTimes desc,id desc limit 0,".$pageSize;
 			}
             
 			$result = mysql_query($sql);
@@ -541,6 +573,7 @@
 			{
                 $item=new Item();
                 $item->parseRow($row);
+				$item->readTimes = $row['readTimes'];
                 
                 if(!$arr)
                 {
@@ -556,6 +589,9 @@
         public static function queryMoreOrderByReadTimes($lastItemId,$pageSize,$tableName)
         {
 			$arr = NULL;
+			
+			date_default_timezone_set('Asia/Shanghai');
+			$theDate=date("Y-m-d",strtotime("-1 week"));
             
 			$sql="";
 			if($lastItemId>0)
@@ -569,11 +605,11 @@
                 }
                 
                 //readTimes between 1 and ".$readTimes." and
-				$sql="SELECT * FROM ".$tableName." where readTimes*10000000+id<".($readTimes*10000000+$lastItemId)." order by readTimes desc,id desc limit 0,".$pageSize;
+				$sql="SELECT * FROM ".$tableName." where datetime>='".$theDate."' and readTimes*10000000+id<".($readTimes*10000000+$lastItemId)." order by readTimes desc,id desc limit 0,".$pageSize;
 			}
 			else
 			{
-				$sql="SELECT * FROM ".$tableName." where readTimes>0 order by readTimes desc,id desc limit 0,".$pageSize;
+				$sql="SELECT * FROM ".$tableName." where datetime>='".$theDate."' and readTimes>0 order by readTimes desc,id desc limit 0,".$pageSize;
 			}
 
 			$result = mysql_query($sql);
@@ -581,6 +617,7 @@
 			{
                 $item=new Item();
                 $item->parseRow($row);
+				$item->readTimes = $row['readTimes'];
                 
                 if(!$arr)
                 {

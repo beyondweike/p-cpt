@@ -13,6 +13,7 @@
     $headers=getAllHeadersLowerCase();
     $encrypt=$headers["encrypt"];//must use lower case
 	$productCode=$headers["productcode"];//must use lower case
+	$version=$headers["version"];
 	
 	//print_r($headers);
 
@@ -58,8 +59,12 @@
 	
 	//add one visit times
 	Visitor::updateVisitTimes($headers);
-	//add one read times
-	Item::addOneReadTimes($articleId,$list_table_name);
+	
+	if($version<2.0)
+	{
+		//add one read times
+		Item::addOneReadTimes($articleId,$list_table_name);
+	}
 	
 	//comment count
 	//$commentCount=Comment::queryCommentCount($articleId,$productCode);
