@@ -7,7 +7,7 @@
 	$users=User::queryAllUser();
 	foreach($users as $user)
 	{
-		echo $user->username." - ".$user->email." - ".$user->registerTime."<br><br>";
+		echo $user->username." - ".$user->email." - ".$user->registerTime." - ".$user->deviceId."<br><br>";
 	}
 
 	dbClose($con);

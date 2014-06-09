@@ -20,7 +20,8 @@
 			$this->password = $row['password'];
             $this->email = $row['email'];
             $this->username = $row['username'];
-            $this->authority = $row['authority'];
+            $this->deviceId = $row['deviceId'];
+			$this->authority = $row['authority'];
 		}
 
 		 function insertToDatabase()
