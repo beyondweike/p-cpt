@@ -645,7 +645,7 @@
 			return $arr;
         }
 		 
-		 public static function queryKeywords($keywords,$lastItemId,$pageSize,$tableName)
+		 public static function queryKeywords($keywords,$itemId,$pageSize,$tableName,$isRefresh=false)
 		 {
 			$arr = NULL;
 			
@@ -654,22 +654,20 @@
 			$keywords=preg_replace("/\s+/"," ",$keywords);
 			$keywords=preg_replace("/\s/","%",$keywords);
 
-			$sql="";
-			if($lastItemId>0)
+			$idCondition="";
+			if($itemId>0)
 			{
-				$sql="SELECT * FROM ".$tableName." where (tags like '%".$keywords."%' or title like '%".$keywords."%' or briefDesc like '%".$keywords."%') and id<".$lastItemId." order by id desc limit 0,".$pageSize;
-			}
-			else
-			{
-				$sql="SELECT * FROM ".$tableName." where  tags like '%".$keywords."%' or title like '%".$keywords."%' or briefDesc like '%".$keywords."%'  order by id desc limit 0,".$pageSize;
+				if($isRefresh)
+				{
+					$idCondition="and id>".$itemId;
+				}
+				else
+				{
+					$idCondition="and id<".$itemId;
+				}
 			}
 			
-			//test
-			//$sql="SELECT * FROM ".$tableName." where  tags like '%".$keywords."%' order by id desc limit 0,".$pageSize;
-			
-			//test
-			//echo $sql;
-			//echo "<br>";
+			$sql="SELECT * FROM ".$tableName." where (tags like '%".$keywords."%' or title like '%".$keywords."%' or briefDesc like '%".$keywords."%') ".$idCondition." order by id desc limit 0,".$pageSize;
 
 			$result = mysql_query($sql);
 			if($result)

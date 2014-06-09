@@ -69,14 +69,18 @@
 	if(isset($_GET['keywords']))//query keywords
 	{
 		$keywords=$_GET['keywords'];
-		$lastItemId=0;
+
 		if (isset($_GET['lastItemId']))
 		{
 			$lastItemId=$_GET['lastItemId'];
+			$dataArray=Item::queryKeywords($keywords,$lastItemId,$pageSize,$service->tableName);
 		}
-	
-		$dataArray=Item::queryKeywords($keywords,$lastItemId,$pageSize,$service->tableName);
-        
+		else if (isset($_GET['topItemId']))
+		{
+			$topItemId=$_GET['topItemId'];
+			$dataArray=Item::queryKeywords($keywords,$topItemId,$pageSize,$service->tableName,true);
+		}
+		        
         date_default_timezone_set('Asia/Shanghai');
         $filePathName="../logs/search_".date("Y-m",time()).".log";
         log2File($filePathName,"devicename:".$headers["devicename"]." keywords:".$keywords);
