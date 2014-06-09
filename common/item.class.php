@@ -86,7 +86,7 @@
 			 return $isValuesValid;
 		 }
 	
-		 function checkItemExists($tableName,&$existsId=NULL,&$existsCategoryCode=NULL)
+		 function checkItemExistsByHref($tableName,&$existsId=NULL,&$existsCategoryCode=NULL)
 		 {
 			 $exists=false;
 			 
@@ -97,8 +97,7 @@
 			 //echo " <br><br>";
 			 
 			 $result=mysql_query($sql);
-			 
-			 if($result!==false)
+			 if($result)
 			 {
 				if($rows = mysql_fetch_array($result))
 				{
@@ -120,14 +119,14 @@
 			 return $exists;
 		 }
 
-		 function insertItemToDatabase($tableName,$categoryPriorityDic)
+		 function insertOrUpdateItemToDatabase($tableName,$categoryPriorityDic)
 		 {
 			//warning. make sure href,title field enough long.   vchar 300
 			 $existsId=-1;
              $existsCategoryCode=-1;
-			 $result=false;
+			 $result=false;//修改或添加
 			 
-			 $exists=$this->checkItemExists($tableName,$existsId,$existsCategoryCode);
+			 $exists=$this->checkItemExistsByHref($tableName,$existsId,$existsCategoryCode);
 			 
 			 if(!$exists)
 			 {
@@ -143,8 +142,7 @@
 					$filePathName="../logs/sql_error_".date("Y-m-d",time()).".log";
 					log2File($filePathName,$sql."\n".mysql_error());
 				 }
-				 
-				 if($rows = mysql_fetch_array($result))
+				 else if($rows = mysql_fetch_array($result))
 				 {
 					 $existsId=$rows[0];
 					 $existsCategoryCode=$rows[1];
@@ -226,6 +224,11 @@
 			$sql="SELECT id,tags FROM ".$tableName." where href='".$url."'";
 
 			$result=mysql_query($sql);
+			if($result===false)
+			{
+				return;
+			}
+			
 			if($rows = mysql_fetch_array($result))
 			{
 				$id=$rows[0];
@@ -235,7 +238,7 @@
 				$tempTagArray=explode(',',$tempTagsStr);
 				
 				foreach ($tagArray as $tag)
-    			{
+				{
 					if(!in_array($tag, $tempTagArray))
 					{
 						if(strlen($tagsStr)==0)
@@ -255,8 +258,6 @@
 					$ret=mysql_query($sql);
 				}
 			}
-			
-			//return $ret;
 		 }
         
 		public static function addReadTimes($articleId,$readTimes,$tableName)
@@ -303,27 +304,15 @@
 			$sql="SELECT href FROM ".$tableName." where title='".$title."'";
 
 			$result=mysql_query($sql);
-			if($rows = mysql_fetch_array($result))
+			if($result)
 			{
-				$href=$rows[0];
+				if($rows = mysql_fetch_array($result))
+				{
+					$href=$rows[0];
+				}
 			}
-
-			return $href;
-		 }
-		 
-		 public static function queryIdByHref($href,$tableName)
-		 {
-            $id=0;
 			
-			$sql="SELECT id FROM ".$tableName." where href='".$href."'";
-
-			$result=mysql_query($sql);
-			if($rows = mysql_fetch_array($result))
-			{
-				$id=$rows[0];
-			}
-
-			return $id;
+			return $href;
 		 }
 		 
 		 public static function queryStatistics($articleId,$tableName,&$readTimes,&$commentCount,&$shareTimes)
@@ -349,12 +338,14 @@
 			
 			$sql="SELECT * FROM ".$tableName." where id=".$articleId;
 			$result=mysql_query($sql);
-			if($row = mysql_fetch_array($result))
+			if($result)
 			{
-				$item=new Item();
-			 	$item->parseRow($row);
+				if($row = mysql_fetch_array($result))
+				{
+					$item=new Item();
+					$item->parseRow($row);
+				}
 			}
-
 			return $item;
 		 }
 		 
@@ -373,11 +364,14 @@
 			}
 			
 			$result=mysql_query($sql);
-			if($rows = mysql_fetch_array($result))
+			if($result)
 			{
-				$count=$rows[0];
+				if($rows = mysql_fetch_array($result))
+				{
+					$count=$rows[0];
+				}
 			}
-
+			
 			return $count;
 		 }
 
@@ -396,20 +390,23 @@
 			}
 
 			$result = mysql_query($sql);
-			while($row = mysql_fetch_array($result))
+			if($result)
 			{
-			  //echo $row['id'] . " " .$row['title'] . " " . $row['href']. " " . $row['datetime'];
-			  //echo "<br />";
-
-			  $item=new Item();
-			  $item->parseRow($row);
-
-			  if(!$arr)
-			  {
-				$arr = array();
-			  }
-
-			  $arr[] = $item;
+				while($row = mysql_fetch_array($result))
+				{
+				  //echo $row['id'] . " " .$row['title'] . " " . $row['href']. " " . $row['datetime'];
+				  //echo "<br />";
+	
+				  $item=new Item();
+				  $item->parseRow($row);
+	
+				  if(!$arr)
+				  {
+					$arr = array();
+				  }
+	
+				  $arr[] = $item;
+				}
 			}
 
 			return $arr;
@@ -430,22 +427,25 @@
 			}
 
 			$result = mysql_query($sql);
-			while($row = mysql_fetch_array($result))
+			if($result)
 			{
-			  //echo $row['id'] . " " .$row['title'] . " " . $row['href']. " " . $row['time'];
-			  //echo "<br />";
+				while($row = mysql_fetch_array($result))
+				{
+				  //echo $row['id'] . " " .$row['title'] . " " . $row['href']. " " . $row['time'];
+				  //echo "<br />";
+		
+				  $item=new Item();
+				  $item->parseRow($row);
 	
-			  $item=new Item();
-			  $item->parseRow($row);
-
-			  if(!$arr)
-			  {
-				$arr = array();
-			  }
-
-			  $arr[] = $item;
+				  if(!$arr)
+				  {
+					$arr = array();
+				  }
+	
+				  $arr[] = $item;
+				}
 			}
-
+			
 			return $arr;
 		 }
 		 
@@ -454,24 +454,27 @@
 			$arr = NULL;
 
 			$sql="SELECT * FROM ".$tableName." where categoryCode in (".$categoryCode.") ";
-             if($bottomId>0)
-             {
-                 $sql.=" and id<".$bottomId;
-             }
-             $sql.=" and datetime>='".$datetime."' order by id desc";
+            if($bottomId>0)
+            {
+            	$sql.=" and id<".$bottomId;
+            }
+            $sql.=" and datetime>='".$datetime."' order by id desc";
 
 			$result = mysql_query($sql);
-			while($row = mysql_fetch_array($result))
+			if($result)
 			{
-			  $item=new Item();
-			  $item->parseRow($row);
-
-			  if(!$arr)
-			  {
-				$arr = array();
-			  }
-
-			  $arr[] = $item;
+				while($row = mysql_fetch_array($result))
+				{
+				  $item=new Item();
+				  $item->parseRow($row);
+	
+				  if(!$arr)
+				  {
+					$arr = array();
+				  }
+	
+				  $arr[] = $item;
+				}
 			}
 
 			return $arr;
@@ -493,19 +496,22 @@
 			}
             
 			$result = mysql_query($sql);
-			while($row = mysql_fetch_array($result))
+			if($result)
 			{
-                $item=new Item();
-                $item->parseRow($row);
-                
-                if(!$arr)
-                {
-                    $arr = array();
-                }
-                
-                $arr[] = $item;
+				while($row = mysql_fetch_array($result))
+				{
+					$item=new Item();
+					$item->parseRow($row);
+					
+					if(!$arr)
+					{
+						$arr = array();
+					}
+					
+					$arr[] = $item;
+				}
 			}
-            
+			
 			return $arr;
         }
         
@@ -524,18 +530,21 @@
 			}
             
 			$result = mysql_query($sql);
-			while($row = mysql_fetch_array($result))
+			if($result)
 			{
-                $item=new Item();
-                $item->parseRow($row);
-				$item->readTimes = $row['readTimes'];
-                
-                if(!$arr)
-                {
-                    $arr = array();
-                }
-                
-                $arr[] = $item;
+				while($row = mysql_fetch_array($result))
+				{
+					$item=new Item();
+					$item->parseRow($row);
+					$item->readTimes = $row['readTimes'];
+					
+					if(!$arr)
+					{
+						$arr = array();
+					}
+					
+					$arr[] = $item;
+				}
 			}
             
 			return $arr;
@@ -569,18 +578,21 @@
 			}
             
 			$result = mysql_query($sql);
-			while($row = mysql_fetch_array($result))
+			if($result)
 			{
-                $item=new Item();
-                $item->parseRow($row);
-				$item->readTimes = $row['readTimes'];
-                
-                if(!$arr)
-                {
-                    $arr = array();
-                }
-                
-                $arr[] = $item;
+				while($row = mysql_fetch_array($result))
+				{
+					$item=new Item();
+					$item->parseRow($row);
+					$item->readTimes = $row['readTimes'];
+					
+					if(!$arr)
+					{
+						$arr = array();
+					}
+					
+					$arr[] = $item;
+				}
 			}
             
 			return $arr;
@@ -613,18 +625,21 @@
 			}
 
 			$result = mysql_query($sql);
-			while($row = mysql_fetch_array($result))
+			if($result)
 			{
-                $item=new Item();
-                $item->parseRow($row);
-				$item->readTimes = $row['readTimes'];
-                
-                if(!$arr)
-                {
-                    $arr = array();
-                }
-                
-                $arr[] = $item;
+				while($row = mysql_fetch_array($result))
+				{
+					$item=new Item();
+					$item->parseRow($row);
+					$item->readTimes = $row['readTimes'];
+					
+					if(!$arr)
+					{
+						$arr = array();
+					}
+					
+					$arr[] = $item;
+				}
 			}
             
 			return $arr;
@@ -657,17 +672,20 @@
 			//echo "<br>";
 
 			$result = mysql_query($sql);
-			while($row = mysql_fetch_array($result))
+			if($result)
 			{
-			  $item=new Item();
-			  $item->parseRow($row);
-
-			  if(!$arr)
-			  {
-				$arr = array();
-			  }
-
-			  $arr[] = $item;
+				while($row = mysql_fetch_array($result))
+				{
+				  $item=new Item();
+				  $item->parseRow($row);
+	
+				  if(!$arr)
+				  {
+					$arr = array();
+				  }
+	
+				  $arr[] = $item;
+				}
 			}
 
 			return $arr;
@@ -716,7 +734,7 @@
 				$valid=$item->preproccessValues();
 				if($valid)
 				{
-					$exists=$item->checkItemExists($tableName);
+					$exists=$item->checkItemExistsByHref($tableName);
 					if($exists)
 					{
 						//test
@@ -737,7 +755,7 @@
 				foreach($items as $item)
 				{
 					$ret=false;
-					$ret=$item->insertItemToDatabase($tableName,$categoryPriorityDic);
+					$ret=$item->insertOrUpdateItemToDatabase($tableName,$categoryPriorityDic);
 					if($ret)
 					{
 						$newCount++;

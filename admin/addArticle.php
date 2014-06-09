@@ -63,7 +63,7 @@
         $categoryPriorityDic=NULL;
         
         $con=dbConnect();
-        $ret=$item->insertItemToDatabase($tableName,$categoryPriorityDic);
+        $ret=$item->insertOrUpdateItemToDatabase($tableName,$categoryPriorityDic);
         dbClose($con);
         
         if($ret)

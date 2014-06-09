@@ -20,8 +20,9 @@
 		return NULL;
 	}
 
-	$ret=0;
+	$ret=false;
 	$itemId=0;
+	$message="";
 
 	if (isset($_POST['href']))
 	{
@@ -37,12 +38,14 @@
         $item->title=$title;
 		$item->categoryCode=$categoryCode;
 		
-		$itemId=Item::queryIdByHref($href,$tableName);
-		if($itemId<=0)
+		$valid=$item->preproccessValues();
+		if($valid)
 		{
-			$valid=$item->preproccessValues();
-			if($valid)
+			$ret=$item->checkItemExistsByHref($tableName,$itemId);
+			if(!$ret)
 			{
+				$message="0";
+			
 				$service=Service::getService($productCode);
 				$categoriesPath="../".$service->dir."/".Properties::getRelativeCategoriesPath();
 			
@@ -51,17 +54,20 @@
 				$rootCategory->parsePath($categoriesPath);
 				$rootCategory->getCategoryPriorityDic($categoryPriorityDic);
 				
-				$ret=$item->insertItemToDatabase($tableName,$categoryPriorityDic);
+				$ret=$item->insertOrUpdateItemToDatabase($tableName,$categoryPriorityDic);
 				$itemId=$item->id;
+				
+				$message="1";
+				
 			}
-		}
-		else
-		{
-			$ret=true;
+			else
+			{
+				$message="2";
+			}
 		}
         
         dbClose($con);
     }
 
-	echo json_encode(array('success'=>$ret?1:0,'itemId'=>$itemId,'message'=>""));
+	echo json_encode(array('success'=>$ret?1:0,'itemId'=>$itemId,'message'=>$message));
 ?>
