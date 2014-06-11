@@ -349,6 +349,30 @@
 			return $item;
 		 }
 		 
+		 public static function queryItemDicByIds($articleIds,$tableName)
+		 {
+            $arr=NULL;
+			
+			$sql="SELECT * FROM ".$tableName." where id in (".$articleIds.")";
+			$result=mysql_query($sql);
+			if($result)
+			{
+				while($row = mysql_fetch_array($result))
+				{
+					$item=new Item();
+					$item->parseRow($row);
+					
+					if(!$arr)
+					{
+						$arr = array();
+					}
+		
+					$arr["".$item->id] = $item;
+				}
+			}
+			return $arr;
+		 }
+		 
 		 public static function queryNewestCount($topItemId,$categoryCode,$tableName)
 		 {
             $count=0;

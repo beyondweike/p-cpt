@@ -44,12 +44,31 @@
         $commentArray=Comment::queryUserCommentArray($userId,$productCode);
         dbClose($con);
     }
-
+	
 	if($commentArray)
 	{
+		$tableName="list_table";
+		
+		$articleIds="";
+		foreach($commentArray as $comment)
+		{	
+			$articleIds.=$comment->articleId;
+			$articleIds.=",";
+		}
+		$articleIds=substr($articleIds,0,strlen($articleIds)-1);
+		
+		$con=dbConnect();
+        $articleItemDic=Item::queryItemDicByIds($articleIds,$tableName);
+        dbClose($con);
+	
 		$jsonObjects=array();
 		foreach($commentArray as $comment)
-		{
+		{	
+			if($articleItemDic)
+			{
+				$comment->articleItem=$articleItemDic["".$comment->articleId];
+			}
+				
 			$jsonObjects[]=$comment->jsonEncode();
 		}
 		

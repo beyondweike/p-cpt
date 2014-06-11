@@ -158,9 +158,6 @@
                 $item=new Comment();
                 $item->parseRow($row,$useUrlencodeContent);
 				
-				$articleItem=Item::queryItemById($item->articleId,"list_table");
-				$item->articleItem=$articleItem;
-				
                 if(!$arr)
                 {
                     $arr = array();
