@@ -232,7 +232,7 @@
       text=text.replace(/\t/g,'\\t');
       text=text.replace(/\"/g,'\\"');
                         
-                        return text;
+      return text;
   }
                           
     function replaceImgSrc(src)
@@ -342,6 +342,18 @@
         checkSetPageOffsetY();
     }
     
+  function localImgOnload(img)
+  {
+       var ret=endWith(img.src,"@2x.png");
+       var scaled=img.getAttribute("scaled");//设置这个属性保存是否已缩放过，防止重复缩放
+       if(ret && scaled!="true")
+       {
+           img.width=img.width/2;//不用再设置 img.height=img.height/2;
+           img.setAttribute("scaled","true");
+           img.style.visibility="visible";
+       }
+   }
+   
     function imgOnload(img)
     {
         img.style.display="block";
@@ -506,13 +518,28 @@
         selector.backgroundColor=procedureBgColor;
     }
     
-    function setTitleBodyBottom(categoryName,title,datetime,page_number,body,bottom)
+    function setReadTimes(read_times)
+    {
+        var element=document.getElementById("read_times");
+          if(read_times!=undefined && read_times>0)
+          {
+                element.innerHTML=read_times;
+                element.style.display="inline";
+          }
+          else
+          {
+                element.innerHTML=0;
+                element.style.display="none";
+          }
+    }
+                      
+    function setTitleBodyBottom(categoryName,title,datetime,page_number,body,bottom,read_times)
     {
         window.scrollTo(0,0);
         
         var element=document.getElementById("topSpan");
         element.innerHTML=categoryName;
-        
+
         element=document.getElementById("title");
         element.innerHTML=title;
         
@@ -522,7 +549,9 @@
             datetime="&nbsp;";
         }
         element.innerHTML=datetime;
-        
+
+        setReadTimes(read_times);
+                      
         element=document.getElementById("page_number");
         element.innerHTML=page_number;
     
@@ -541,7 +570,7 @@
         
         formatCodeSection("<hidden>");
     }
-    
+
     function formatCodeSection(seperator)
     {
         var elements=document.getElementsByClassName("brush: js");
@@ -610,6 +639,12 @@
             videos[i].autoplay=undefined;
         }
         
+        var element=document.getElementById("read_times");
+        if(element.style.display=="none" && parseInt(element.innerHTML)>0)
+        {
+            element.style.display="inline";
+        }
+                      
         /*
         //http://www.cnblogs.com/newyorker/archive/2013/02/14/2891298.html
         var cells = document.querySelectorAll(".articleBody> div:only-child > div:only-child > table:only-child td");
