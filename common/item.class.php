@@ -592,9 +592,11 @@
                 {
                     $readTimes=$rows[0];
                 }
+				
+				$factor=10000000;
                 
                 //readTimes>=".$readTimes." and
-				$sql="SELECT * FROM ".$tableName." where datetime>='".$theDate."' and readTimes*10000000+id>".($readTimes*10000000+$topItemId)." order by readTimes desc,id desc limit 0,".$pageSize;
+				$sql="SELECT * FROM ".$tableName." where datetime>='".$theDate."' and readTimes*".$factor."+id>".($readTimes*$factor+$topItemId)." order by readTimes desc,id desc limit 0,".$pageSize;
 			}
 			else
 			{
@@ -629,6 +631,8 @@
 			date_default_timezone_set('Asia/Shanghai');
 			$theDate=date("Y-m-d",strtotime("-1 week"));
             
+			$factor=10000000;
+			
 			$sql="";
 			if($lastItemId>0)
 			{
@@ -641,7 +645,7 @@
                 }
                 
                 //readTimes between 1 and ".$readTimes." and
-				$sql="SELECT * FROM ".$tableName." where datetime>='".$theDate."' and readTimes*10000000+id<".($readTimes*10000000+$lastItemId)." order by readTimes desc,id desc limit 0,".$pageSize;
+				$sql="SELECT * FROM ".$tableName." where datetime>='".$theDate."' and readTimes*".$factor."+id<".($readTimes*$factor+$lastItemId)." order by readTimes desc,id desc limit 0,".$pageSize;
 			}
 			else
 			{

@@ -4,6 +4,7 @@
     include_once("asynCall.function.php");
     include_once("../common/file.function.php");
 	include_once("../common/visitor.class.php");
+	include_once("../common/item.class.php");
 	
 	$valide=FALSE;
 	
