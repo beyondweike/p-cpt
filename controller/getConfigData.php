@@ -109,7 +109,7 @@
         else
 		{
 			//quotations.txt
-			//$retContent.=bytesContentWithFileType("../$dir/config/resource/","quotations.txt");
+			$retContent.=bytesContentWithFileType("../$dir/config/resource/","quotations.txt");
 			
 			//categories.json
             //$retContent.=bytesContentWithFileType("../$dir/config/resource/","categories.json");
@@ -123,8 +123,8 @@
 			//common.js
 			//$retContent.=bytesContentWithFileType("../$dir/config/resource/","common.js");
 			
-			//frame.html
-            //$retContent.=bytesContentWithFileType("../$dir/config/resource/","frame.html");
+			//hotWords.txt
+            $retContent.=bytesContentWithFileType("../$dir/config/resource/","hotWords.txt");
 		}
 		
 		echo $retContent;
