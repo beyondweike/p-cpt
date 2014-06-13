@@ -32,7 +32,7 @@
 	
 	if(!$valide)
 	{
-		return NULL;
+		return "非法登录";
 	}
 
 	$ret=0;

@@ -67,6 +67,19 @@
             
             return $ret;
         }
+		
+		//add readCount filed at 2014-6-13
+		public static function updateAddReadCount($userId,$readCount)
+        {
+			date_default_timezone_set('Asia/Shanghai');
+            $lastUpdateTime=date("Y-m-d H:i:s",time());
+			
+            $sql="update user_table set readCount=readCount+".$readCount.", lastUpdateTime='".$lastUpdateTime."' where id=".$userId;
+            
+            $ret=mysql_query($sql);
+            
+            return $ret;
+        }
 
 		 public static function queryUser($userId)
 		 {
@@ -91,10 +104,20 @@
 			$sql="SELECT * FROM user_table where username='".$username."'";
 
 			$result = mysql_query($sql);
-			if($row = mysql_fetch_array($result))
+			
+			if($result===false)
 			{
-			  $item=new User();
-			  $item->parseRow($row);
+				date_default_timezone_set('Asia/Shanghai');
+				$filePathName="../logs/sql_error_".date("Y-m-d",time()).".log";
+				log2File($filePathName,$sql."\n".mysql_error());
+			}
+            else
+			{
+				if($row = mysql_fetch_array($result))
+				{
+				  $item=new User();
+				  $item->parseRow($row);
+				}
 			}
 
 			return $item;

@@ -7,6 +7,7 @@
 	include_once("../common/collectItem.class.php");
 	include_once("../common/item.class.php");
     include_once("../common/visitor.class.php");
+	include_once("../common/user.class.php");
 	
 	$valide=FALSE;
 	
@@ -73,13 +74,14 @@
 	
 	Item::queryStatistics($articleId,$list_table_name,$readTimes,$commentCount,$shareTimes);
 	
-	//is collected
+	//query collected
 	if (isset($_GET['userId']))
 	{
 		$userId=$_GET['userId'];
 		if($userId>0)
 		{
 			$collected=CollectItem::queryArticleCollected($articleId,$userId,$productCode);
+			User::updateAddReadCount($userId,1);
 		}
 	}
 
