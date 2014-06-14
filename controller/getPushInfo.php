@@ -44,7 +44,7 @@
 	dbClose($con);
 	
 	$body['type'] = 0 ;
-	$body['article'] = array('id' => $item->id,'catecode' => $item->categoryCode,'time' => $item->datetime,'title' => $item->title,'brief' => $item->briefDesc);
+	$body['article'] = array('id' => $item->id,'catecode' => $item->categoryCode,'time' => $item->datetime,'title' => $item->title,'brief' => $item->briefDesc,'readTimes' => $item->readTimes,'shareTimes' => $item->shareTimes,'commentCount' => $item->commentCount);
 			
 	$payload = json_encode($body,JSON_UNESCAPED_UNICODE);
 
