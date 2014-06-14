@@ -112,7 +112,7 @@
 			$retContent.=bytesContentWithFileType("../$dir/config/resource/","quotations.txt");
 			
 			//categories.json
-            //$retContent.=bytesContentWithFileType("../$dir/config/resource/","categories.json");
+            $retContent.=bytesContentWithFileType("../$dir/config/resource/","categories.json");
 			
 			//serverSetting.json
             //$retContent.=bytesContentWithFileType("../$dir/config/resource/","serverSetting.json");

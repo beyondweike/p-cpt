@@ -223,22 +223,21 @@
 		
 		return $subString;
 	}
-	
 
-	function isStringStartWith($haystack, $needle)
+	function isStringStartWith($str, $theSubstr)
 	{
-		return !strncmp($haystack, $needle, strlen($needle));
+		return !strncmp($str, $theSubstr, strlen($theSubstr));
 	}
 	
-	function isStringEndWith($haystack, $needle)
+	function isStringEndWith($str, $theSubstr)
 	{
-		$length = strlen($needle);
+		$length = strlen($theSubstr);
 		if ($length == 0) 
 		{
 			return true;
 		}
 	
-		return (substr($haystack, -$length) === $needle);
+		return (substr($str, -$length) === $theSubstr);
 	}
 
 ?>

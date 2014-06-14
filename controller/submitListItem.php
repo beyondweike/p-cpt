@@ -28,45 +28,56 @@
 	{
 		$href=$_POST['href'];
         $title=$_POST['title'];	
-		$categoryCode=$_POST['categoryCode'];
-	
-        $con=dbConnect();
-        
-		$tableName="list_table";
-        $item=new Item();
-        $item->href=$href;
-        $item->title=$title;
-		$item->categoryCode=$categoryCode;
 		
-		$valid=$item->preproccessValues();
+		$valid=true;
+		
+		if(strlen($title)==0 || isStringStartWith($title,"http://") || isStringStartWith($title,"https://"))
+		{
+			$valid=false;
+		}
+		
 		if($valid)
 		{
-			$ret=$item->checkItemExistsByHref($tableName,$itemId);
-			if(!$ret)
-			{
-				$message="0";
+			$categoryCode=$_POST['categoryCode'];
+	
+			$tableName="list_table";
+			$item=new Item();
+			$item->href=$href;
+			$item->title=$title;
+			$item->categoryCode=$categoryCode;
 			
-				$service=Service::getService($productCode);
-				$categoriesPath="../".$service->dir."/".Properties::getRelativeCategoriesPath();
-			
-				$categoryPriorityDic=array();
-				$rootCategory=new Category();
-				$rootCategory->parsePath($categoriesPath);
-				$rootCategory->getCategoryPriorityDic($categoryPriorityDic);
-				
-				$ret=$item->insertOrUpdateItemToDatabase($tableName,$categoryPriorityDic);
-				$itemId=$item->id;
-				
-				$message="1";
-				
-			}
-			else
+			$valid=$item->preproccessValues();
+			if($valid)
 			{
-				$message="2";
+				$con=dbConnect();
+				
+				$ret=$item->checkItemExistsByHref($tableName,$itemId);
+				if(!$ret)
+				{
+					$message="0";
+				
+					$service=Service::getService($productCode);
+					$categoriesPath="../".$service->dir."/".Properties::getRelativeCategoriesPath();
+				
+					$categoryPriorityDic=array();
+					$rootCategory=new Category();
+					$rootCategory->parsePath($categoriesPath);
+					$rootCategory->getCategoryPriorityDic($categoryPriorityDic);
+					
+					$ret=$item->insertOrUpdateItemToDatabase($tableName,$categoryPriorityDic);
+					$itemId=$item->id;
+					
+					$message="1";
+					
+				}
+				else
+				{
+					$message="2";
+				}
+				
+				dbClose($con);
 			}
 		}
-        
-        dbClose($con);
     }
 
 	echo json_encode(array('success'=>$ret?1:0,'itemId'=>$itemId,'message'=>$message));

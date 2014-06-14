@@ -39,7 +39,7 @@
                                 "www.woshipm.com/.+?/\\d+.html$",
                                 "www.cnbeta.com/articles/\\d+.htm",
 								"www.qianduan.net/[\\w-]+.html",
-                                "www.jbxue.com/article/\\d+.html",
+                                "www.jbxue.com/article/(\\w+/)?\\d+.html",
                                 "www.itsoku.com/video/sp/\\d+/v/\\d+.shtml",
                                 "www.gamelook.com.cn/\\d+/\\d+/\\d+",
                                 "www.ifanr.com/\\d+",
