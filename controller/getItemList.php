@@ -183,6 +183,6 @@
 		$pageSize+=1;
 	}
 
-	echo json_encode(array('pageSize'=>$pageSize,'dataArray'=>$dataArray));
+	echo json_encode(array('success'=>true,'pageSize'=>$pageSize,'dataArray'=>$dataArray));
 	
 ?>

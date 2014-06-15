@@ -33,7 +33,7 @@
 		return NULL;
 	}
 
-	$result=0;
+	$ret=0;
 	$userId=0;
 	if (isset($_POST['userId']))
 	{
@@ -64,8 +64,6 @@
 					$ret=$item->insertItemToDatabase();
 					if($ret)
 					{
-						$result=1;
-						
 						$collectIdArray[]=$item->id;
 					}
 				}
@@ -78,15 +76,11 @@
 			if($articleIds!="")
 			{
 				$ret=CollectItem::deleteItems($articleIds,$userId,$productCode);
-				if($ret)
-				{
-					$result=1;
-				}
 			}
 		}
 		
         dbClose($con);
     }
 
-	echo json_encode(array('success'=>$result,'collectIdArray'=>$collectIdArray));
+	echo json_encode(array('success'=>$ret,'collectIdArray'=>$collectIdArray));
 ?>

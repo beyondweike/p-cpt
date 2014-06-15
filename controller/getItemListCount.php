@@ -3,6 +3,8 @@
     include_once("asynCall.function.php");
 	include_once("service.class.php");
 	
+	//for <=1.11
+	
 	//format example  "0,11;1,12;2,13;3,14;4,15;5,16;";
 	
 	$headers=getAllHeadersLowerCase();

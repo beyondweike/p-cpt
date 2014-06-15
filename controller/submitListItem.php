@@ -80,5 +80,5 @@
 		}
     }
 
-	echo json_encode(array('success'=>$ret?1:0,'itemId'=>$itemId,'message'=>$message));
+	echo json_encode(array('success'=>$ret,'itemId'=>intval($itemId),'message'=>$message));
 ?>

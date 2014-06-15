@@ -1,7 +1,4 @@
 <?php
-
-	//for <=1.11
-
     include_once("db.function.php");
 	include_once("properties.class.php");
     include_once("service.class.php");

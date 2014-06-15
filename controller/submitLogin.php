@@ -74,5 +74,5 @@
         dbClose($con);
     }
 
-	echo json_encode(array('success'=>$ret,'message'=>$message,'userId'=>$userId,'email'=>$email,'authority'=>$authority));
+	echo json_encode(array('success'=>$ret,'message'=>$message,'userId'=>intval($userId),'email'=>$email,'authority'=>intval($authority)));
 ?>

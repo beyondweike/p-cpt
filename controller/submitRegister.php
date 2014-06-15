@@ -79,7 +79,6 @@
 					$ret=$user->insertToDatabase();
 					if($ret)
 					{
-						$ret=1;
 						$userId=$user->id;
 					}
 					
@@ -103,5 +102,5 @@
 		dbClose($con);
 	}
 	
-    echo json_encode(array('success'=>$ret,"message"=>$message,'userId'=>$userId));
+    echo json_encode(array('success'=>$ret,"message"=>$message,'userId'=>intval($userId)));
 ?>

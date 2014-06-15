@@ -31,6 +31,7 @@
             $this->briefDesc = $row['briefDesc'];
 			$this->commentCount = $row['commentCount'];
 			$this->shareTimes = $row['shareTimes'];
+			$this->readTimes = $row['readTimes'];
 			
 			//used for json
 			$trans = array( "..."  => "",
@@ -560,7 +561,6 @@
 				{
 					$item=new Item();
 					$item->parseRow($row);
-					$item->readTimes = $row['readTimes'];
 					
 					if(!$arr)
 					{
@@ -610,7 +610,6 @@
 				{
 					$item=new Item();
 					$item->parseRow($row);
-					$item->readTimes = $row['readTimes'];
 					
 					if(!$arr)
 					{
@@ -659,7 +658,6 @@
 				{
 					$item=new Item();
 					$item->parseRow($row);
-					$item->readTimes = $row['readTimes'];
 					
 					if(!$arr)
 					{

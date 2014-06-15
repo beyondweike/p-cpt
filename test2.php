@@ -226,4 +226,8 @@
 	echo $host;
 	echo $port;
 	
+	
+	date_default_timezone_set('Asia/Shanghai');
+	$theDate=date("Y-m-d",strtotime("-1 week"));
+	echo "-1 week date:".$theDate;
 ?>
