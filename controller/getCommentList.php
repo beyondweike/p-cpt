@@ -3,6 +3,7 @@
 	include_once("properties.class.php");
     include_once("service.class.php");
     include_once("../common/comment.class.php");
+	include_once("../common/json.function.php");
 	
 	$valide=FALSE;
 	
@@ -53,8 +54,9 @@
 			$jsonObjects[]=$comment->jsonEncode();
 		}
 		
-		$pair0=jsonEncodeKeyObjectsPair("commentArray",$jsonObjects);
-		$json=jsonEncodePair($pair0);
+		$pair0=jsonEncodeKeyNumberPair("success",true);
+		$pair1=jsonEncodeKeyObjectsPair("commentArray",$jsonObjects);
+		$json=jsonEncodePairVariables($pair0,$pair1);
 		
 		echo $json;
 	}

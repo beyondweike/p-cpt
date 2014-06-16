@@ -45,6 +45,15 @@
 		return $json;
 	}
 	
+	function jsonEncodePairVariables()
+	{
+		//echo func_num_args();         //输出参数个数
+		//echo func_get_arg;       //获取单个参数
+                  
+		$pairs = func_get_args();     //获取参数，返回参数数组
+        return jsonEncodePairs($pairs);
+	}
+	
 	function jsonEncodeKeyObjectPair($key,$object)
 	{
 		$json="\"$key\":";
