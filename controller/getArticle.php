@@ -6,6 +6,7 @@
     $headers=getAllHeadersLowerCase();
     $version=$headers["version"];
 	
+	$tableName="list_table";
 	$batch=false;
 	if($version<=1.0)
 	{
@@ -33,7 +34,6 @@
 				$content = getContent($url,$tagArray,$batch);
 				if(count($tagArray)>0)
 				{
-					$tableName="list_table";
 					$con=dbConnect();
 					Item::setTags($url,$tagArray,$tableName);
 					dbClose($con);
@@ -43,7 +43,7 @@
                 {
 					date_default_timezone_set('Asia/Shanghai');
 					$filePathName="../logs/article_error_".date("Y-m-d",time()).".log";
-					log2File($filePathName,$url);
+					log2File($filePathName,"getArticle.php ".$url);
 				}
                 
 				//test
@@ -79,7 +79,6 @@
 							$content = getContent($pageUrl,$tagArray,$batch);
 							if(count($tagArray)>0)
 							{
-								$tableName="list_table";
 								$con=dbConnect();
 								Item::setTags($pageUrl,$tagArray,$tableName);
 								dbClose($con);
@@ -89,7 +88,7 @@
                             {
 								date_default_timezone_set('Asia/Shanghai');
 								$filePathName="../logs/article_error_".date("Y-m-d",time()).".log";
-								log2File($filePathName,$pageUrl);
+								log2File($filePathName,"getArticle.php pageUrl ".$pageUrl);
 							}
 							
 							$contents.="<page>".
@@ -117,79 +116,96 @@
 		set_time_limit(30);
 		
 		$url=NULL;
-		$articleId=0;
-		
-		if(isset($_GET['articleId']))
+		$urlGet=NULL;
+		if(isset($_GET['url']))
 		{
-			$articleId=$_GET['articleId'];
-			
-			$con=dbConnect();
-			$item=Item::queryItemById($articleId,"list_table");
-			$url=$item->href;
-			dbClose($con);
+			$urlGet=$_GET['url'];
+			$url=$urlGet;
 		}
-		else
-		{
-			$url=$_GET['url'];
-		}
-		
-		$tagArray=array();
-		$content=getContent($url,$tagArray);
 
-		if(count($tagArray)>0)
+		/*有的文章原地址已不存在原服器上会存在跳转，本服务器会以302返给客户端，
+		客户端的FHTTPRequest可能处理为错误。但本服务器还会继续执行下面的代码，所以可能保存两份内容，供客户端刷一下。
+		*/
+		$content=getContentWithUrl($url);		
+		if(!$content || $content=="")
 		{
-			$tableName="list_table";
-			$con=dbConnect();
-			Item::setTags($url,$tagArray,$tableName);
-			dbClose($con);
-		}
-		
-		if($content=="")
-		{
-			date_default_timezone_set('Asia/Shanghai');
-			$filePathName="../logs/article_error_".date("Y-m-d",time()).".log";
-			log2File($filePathName,$url);
-            
-            //test
-            //$tempurl=urlEncodeFormatUrl($url);
-            //log2File($filePathName,"urlEncodeFormatUrl: ".$tempurl);
-            
-			//second time search by title
-			if (isset($_GET['title']))
+			$url=NULL;
+			$articleId=0;
+			if(isset($_GET['articleId']))
 			{
-				$title=$_GET['title'];
-				
-				$tableName="list_table";
-				$con=dbConnect();
-				$url=Item::queryHrefByTitle($title,$tableName);
-				dbClose($con);
-				
-                if(strlen($url)>0)
-                {
-                    $tagArray=array();
-					$content=getContent($url,$tagArray);
-					
-					if(count($tagArray)>0)
+				$articleId=$_GET['articleId'];
+				if($articleId>0)
+				{
+					$con=dbConnect();
+					$item=Item::queryItemById($articleId,$tableName);
+					$url=$item->href;
+					dbClose($con);
+				}
+			}
+			
+			$content=getContentWithUrl($url);
+			if(!$content || $content=="")
+			{
+				$url=NULL;
+				$title=NULL;
+				if(isset($_GET['title']))
+				{
+					$title=$_GET['title'];
+					if($title)
 					{
-						$tableName="list_table";
 						$con=dbConnect();
-						Item::setTags($url,$tagArray,$tableName);
+						$url=Item::queryHrefByTitle($title,$tableName);
 						dbClose($con);
 					}
-		
-                    if($content=="")
-                    {
-                        log2File($filePathName,$url);
-                    }
-                }
+				}
+				
+				$content=getContentWithUrl($url);
+				if($content && $content!="")
+				{
+					$filePathName=getLocalFilePathNameWithArticleUrl($urlGet);
+					funSaveFile($filePathName, $content);
+				}
 			}
+			else
+			{
+				$filePathName=getLocalFilePathNameWithArticleUrl($urlGet);
+				funSaveFile($filePathName, $content);
+			}			
 		}
 		
-		if($content!="" && $articleId>0)
+		if($content && $content!="" && $url!=$urlGet)
 		{
 			$content="<url>".$url."</url>".$content;
 		}
 
 		echo $content;
+	}
+	
+	function getContentWithUrl($url)
+	{
+		$tableName="list_table";
+		$content=NULL;
+		
+		if($url && $url!="")
+		{
+			$tagArray=array();
+			$content=getContent($url,$tagArray);
+	
+			if(count($tagArray)>0)
+			{
+				$con=dbConnect();
+				Item::setTags($url,$tagArray,$tableName);
+				dbClose($con);
+			}
+			
+			if(!$content || $content=="")
+			{
+				date_default_timezone_set('Asia/Shanghai');
+				$filePathName="../logs/article_error_".date("Y-m-d",time()).".log";
+				log2File($filePathName,"getArticle.php ".$url);
+			}
+		}
+		
+		return $content;
 	}
 ?>

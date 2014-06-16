@@ -2,6 +2,7 @@
 	include_once("cnblogsItem.class.php");
     include_once("cnblogsNewsItem.class.php");
 	include_once("cnblogsKbItem.class.php");
+	include_once("../common/request.function.php");
 	
 	//test
 	//captureCnblogsWebDevListPages(40,"",NULL);

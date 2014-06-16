@@ -52,7 +52,7 @@
 		{
 			date_default_timezone_set('Asia/Shanghai');
 			$filePathName="../logs/article_error_".date("Y-m-d",time()).".log";
-			log2File($filePathName,$url);
+			log2File($filePathName,"viewArticle.php ".$url);
 		}
 		else
 		{

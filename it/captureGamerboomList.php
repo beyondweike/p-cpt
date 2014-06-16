@@ -1,5 +1,7 @@
 <?php
 	include_once("ItemGamerboom.class.php");
+	include_once("../common/request.function.php");
+	include_once("../common/string.function.php");
 	
 	//test
 	//captureGamerboomNewsListPages(40,"");
@@ -49,6 +51,13 @@
 	function captureGamerboomListPage($url,&$pageCount)
 	{
 		$results=fileGetContents( $url );
+		
+		if($results=="")
+		{
+			date_default_timezone_set('Asia/Shanghai');
+			$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
+			log2File($filePathName,"captureGamerboomListPage fileGetContents empty\n".$url);
+		}
 
 		$content = preg_match("/<div class=\"c02 margin-top\">([\s\S]+)<div class=\'wp-pagenavi\'/i",$results,$temp) ? $temp[1]:"";
 
@@ -56,6 +65,13 @@
 		{
             $pageInfo = preg_match("/<div class=\'wp-pagenavi\'>([\s\S]+?)<\/div>/i",$results,$temp) ? $temp[1]:"";
 			$pageCount = preg_match("/共\s*(\\d+)\s*页/isU",$pageInfo,$temp) ? $temp[1]:"";
+		}
+		
+		if($content=="")
+		{
+			date_default_timezone_set('Asia/Shanghai');
+			$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
+			log2File($filePathName,"captureGamerboomListPage preg_match empty\n".$results);
 		}
 		
 		return $content;

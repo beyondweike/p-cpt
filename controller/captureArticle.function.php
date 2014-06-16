@@ -30,9 +30,11 @@
 			}
         }
 
+		$http_response_header0="";
         $statusCode=200;
 		if($http_response_header)
 		{
+			$http_response_header0=$http_response_header[0];
 			$statusCode=substr($http_response_header[0],9,3);
 		}
 		
@@ -42,6 +44,7 @@
 			$results=curlexec($url,NULL,$http_response_header);
 			if($http_response_header)
 			{
+				$http_response_header0=$http_response_header[0];
 				$statusCode=substr($http_response_header[0],9,3);
 			}
 		}
@@ -55,6 +58,7 @@
                 {
                     if(substr($header,0,8)=="Location")
                     {
+						$http_response_header0=$http_response_header[0];
                         $lastResponseStatus=$http_response_header[0];
                         $location=substr($header,10);
                         break;
@@ -65,7 +69,7 @@
 			{
 				date_default_timezone_set('Asia/Shanghai');
 				$filePathName="../logs/article_error_".date("Y-m-d",time()).".log";
-				log2File($filePathName,"http_response_header[0]: ".$http_response_header[0]);
+				log2File($filePathName,$url."\nhttp_response_header[0]: ".$http_response_header0);
 			}
             
             if(!$location || $location==$url)

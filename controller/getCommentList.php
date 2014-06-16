@@ -60,6 +60,6 @@
 	}
 	else
 	{
-		echo json_encode(array('commentArray'=>$commentArray));
+		echo json_encode(array('success'=>true,'commentArray'=>$commentArray));
 	}
 ?>

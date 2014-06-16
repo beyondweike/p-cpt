@@ -1,6 +1,6 @@
 <?php
-	include_once("../common/request.function.php"); 
 	include_once("androidStudyItem.class.php");
+	include_once("../common/request.function.php");
 	
 	//test
 	//captureAndroidStudyInterviewListPages(81);

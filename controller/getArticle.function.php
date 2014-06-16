@@ -11,14 +11,21 @@
 		
 		return $url;
 	}
-			
-	function getContent($url,&$tagArray,$batch=false)
+	
+	function getLocalFilePathNameWithArticleUrl($url)
 	{
-        $url=urlEncodeFormatUrl($url);
+		$url=urlEncodeFormatUrl($url);
         
 		$find = array(":","/","?");
 		$fileName=str_ireplace($find,"_",$url);
 		$filePathName="../articles/".$fileName.".txt";
+		
+		return $filePathName;
+	}
+			
+	function getContent($url,&$tagArray,$batch=false)
+	{
+        $filePathName=getLocalFilePathNameWithArticleUrl($url);
 
 		$content="";
 		

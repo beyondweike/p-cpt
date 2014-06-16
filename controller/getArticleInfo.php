@@ -87,5 +87,5 @@
 
 	dbClose($con);
 
-	echo json_encode(array('readTimes'=>intval($readTimes),'commentCount'=>intval($commentCount),'shareTimes'=>intval($shareTimes),'collected'=>$collected));
+	echo json_encode(array('success'=>true,'readTimes'=>intval($readTimes),'commentCount'=>intval($commentCount),'shareTimes'=>intval($shareTimes),'collected'=>$collected));
 ?>
