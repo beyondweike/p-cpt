@@ -25,7 +25,11 @@
 			
 	function getContent($url,&$tagArray,$batch=false)
 	{
-        $filePathName=getLocalFilePathNameWithArticleUrl($url);
+        $url=urlEncodeFormatUrl($url);
+        
+		$find = array(":","/","?");
+		$fileName=str_ireplace($find,"_",$url);
+		$filePathName="../articles/".$fileName.".txt";
 
 		$content="";
 		
