@@ -56,7 +56,9 @@
 		{
 			date_default_timezone_set('Asia/Shanghai');
 			$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
-			log2File($filePathName,"captureGamerboomListPage fileGetContents empty\n".$url);
+			log2File($filePathName,"captureGamerboomListPage fileGetContents empty\n".$url."\n");
+			
+			return "";
 		}
 
 		$content = preg_match("/<div class=\"c02 margin-top\">([\s\S]+)<div class=\'wp-pagenavi\'/i",$results,$temp) ? $temp[1]:"";
@@ -71,7 +73,7 @@
 		{
 			date_default_timezone_set('Asia/Shanghai');
 			$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
-			log2File($filePathName,"captureGamerboomListPage preg_match empty\n".$results);
+			log2File($filePathName,"captureGamerboomListPage preg_match empty\n".$url."\n");
 		}
 		
 		return $content;

@@ -1,6 +1,7 @@
 <?php
 	include_once("woshipmItem.class.php");
     include_once("../common/request.function.php");
+	include_once("../common/string.function.php");
 	
 	//test
 	//captureWoshipmITNewsListPages(0,"list_table",NULL);
@@ -113,12 +114,28 @@
 		
 		//echo $results;
 		//echo "$url<br>----------";
+		
+		if($results=="")
+		{
+			date_default_timezone_set('Asia/Shanghai');
+			$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
+			log2File($filePathName,"captureWoshipmItemListPage fileGetContents empty\n".$url."\n");
+			
+			return "";
+		}
 
 		$content = preg_match("/<div[^>]+class=\"content_box bor_cor\"[^>]*>([\s\S]*?)<div[^>]+id=\"pagenavi\"/i",$results,$temp) ? $temp[1]:"";
         if($pageCount<=1)
 		{
 			$pageInfo = preg_match("/<div[^>]+id=\"pagenavi[^>]*>([\s\S]*)<\/div>/i",$results,$temp) ? $temp[1]:"";
 			$pageCount = preg_match("/<span class=\"page-numbers\">1\/(\\d+)\s*<\/span>/",$pageInfo,$temp)?$temp[1]:$pageCount;
+		}
+		
+		if($content=="")
+		{
+			date_default_timezone_set('Asia/Shanghai');
+			$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
+			log2File($filePathName,"captureWoshipmItemListPage preg_match empty\n".$url."\n");
 		}
         
         return $content;

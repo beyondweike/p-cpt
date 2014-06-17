@@ -961,19 +961,36 @@
 				else if(strpos($src,"letv.com")!==FALSE)
 				{
 					//http://www.cnbeta.com/articles/283247.htm
-					$ret=preg_match("/uu=(.*?)&vu=(.*?)&/i",$src,$temp);
+					//http://www.cnbeta.com/articles/296627.htm
+					$uu="";
+					$vu="";
+					$ret=preg_match("/uu=(.*?)&(amp;)?vu=(.*?)&/i",$src,$temp);
 					if($ret)
 					{
 						$uu=$temp[1];
-						$vu=$temp[2];
-						$url="http://api.letvcloud.com/gpc.php?page_url=-&ran=0.808693562168628&sign=726c0cdbce1fcb06a94a19cc625d5cb7&uu=$uu&cf=flash&auto_play=0&format=xml&ver=2.1&source=letv&gpcflag=1&vu=$vu";
-						$pageContent=curlexec($url);
-						
-						$videoSrc=preg_match("/<m3u8><url><!\[CDATA\[(.*?)\]/i",$pageContent,$temp)?$temp[1]:"";
-						$posterImageSrc=preg_match("/\"picStartUrl\":\"(.*?)\"/i",$pageContent,$temp)?$temp[1]:"";
-						$trans = array("\/"  => "/");
-                        $posterImageSrc = strtr($posterImageSrc, $trans);
+						$vu=$temp[3];
 					}
+					else
+					{
+						$ret=preg_match("/uu=(.*?)&(amp;)?vu=(.*?)&/i",$flashvars,$temp);
+						if($ret)
+						{
+							$uu=$temp[1];
+							$vu=$temp[3];
+						}
+					}
+					
+					//可能要解swf
+					$sign="726c0cdbce1fcb06a94a19cc625d5cb7";
+					$ran="0.808693562168628";
+				
+					$url="http://api.letvcloud.com/gpc.php?page_url=-&ran=$ran&sign=$sign&uu=$uu&cf=flash&auto_play=0&format=xml&ver=2.1&source=letv&gpcflag=1&vu=$vu";
+					$pageContent=curlexec($url);
+					
+					$videoSrc=preg_match("/<m3u8><url><!\[CDATA\[(.*?)\]/i",$pageContent,$temp)?$temp[1]:"";
+					$posterImageSrc=preg_match("/\"picStartUrl\":\"(.*?)\"/i",$pageContent,$temp)?$temp[1]:"";
+					$trans = array("\/"  => "/");
+					$posterImageSrc = strtr($posterImageSrc, $trans);
 				}
 				else if(strpos($src,"washingtonpost.com")!==FALSE)
                 {

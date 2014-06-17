@@ -44,6 +44,7 @@
                                 "www.gamelook.com.cn/\\d+/\\d+/\\d+",
                                 "www.ifanr.com/\\d+",
 								"www.tuicool.com/articles/\\w+",
-								"tech.163.com/\\d+/\\d+/\\d+/\\w+.html"
+								"tech.163.com/\\d+/\\d+/\\d+/\\w+.html",
+								"www.360doc.com/content/\\d+/\\d+/\\d+/\\d+_\\d+.shtml"
                                 ]
 }

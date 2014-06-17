@@ -732,7 +732,7 @@
 			{
 				date_default_timezone_set('Asia/Shanghai');
 			 	$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
-				log2File($filePathName,$itemClassName.": items section not found \n".$regString."\n".$srcItemsHtmlContent);
+				log2File($filePathName,$itemClassName.": items section not found \n".$regString."\n".$srcItemsHtmlContent."\n");
 			}
 			
 			return $newCount;

@@ -273,7 +273,11 @@
     {
         $content=NULL;
         
-		if(strpos($url,"9tech.cn")!=false)
+		if(strpos($url,"360doc.com")!=false)
+        {
+            $content=funCapture360docArticle($url,$results);
+        }
+		else if(strpos($url,"9tech.cn")!=false)
         {
             $content=funCapture9TechArticle($url,$results);
         }
@@ -1099,6 +1103,12 @@
 	function funCaptureTuicoolArticle($url,$results)
     {
         $content = preg_match("/<div class=\"article_body\"[^>]*>([\s\S]*?)<div class=\"span4\"/i",$results,$temp)?$temp[1]:"";
+        return array($content);
+    }
+	
+	function funCapture360docArticle($url,$results)
+    {
+        $content = preg_match("/<td[^>]+style=\"position: relative;\"[^>]*>([\s\S]*?)<\/td/i",$results,$temp)?$temp[1]:"";
         return array($content);
     }
 	
