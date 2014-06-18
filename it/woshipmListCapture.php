@@ -135,7 +135,7 @@
 		{
 			date_default_timezone_set('Asia/Shanghai');
 			$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
-			log2File($filePathName,"captureWoshipmItemListPage preg_match empty\n".$url."\n");
+			log2File($filePathName,"captureWoshipmItemListPage preg_match empty\n".$url."\n".$results."\n");
 		}
         
         return $content;
