@@ -109,22 +109,22 @@
         else
 		{
 			//quotations.txt
-			$retContent.=bytesContentWithFileType("../$dir/config/resource/","quotations.txt");
+			//$retContent.=bytesContentWithFileType("../$dir/config/resource/","quotations.txt");
 			
 			//categories.json
-            $retContent.=bytesContentWithFileType("../$dir/config/resource/","categories.json");
+            //$retContent.=bytesContentWithFileType("../$dir/config/resource/","categories.json");
 			
 			//serverSetting.json
-            $retContent.=bytesContentWithFileType("../$dir/config/resource/","serverSetting.json");
+            //$retContent.=bytesContentWithFileType("../$dir/config/resource/","serverSetting.json");
             
-            //error.html
-            //$retContent.=bytesContentWithFileType("../$dir/config/resource/","error.html");
+            //loading.html
+            $retContent.=bytesContentWithFileType("../$dir/config/resource/","loading.html");
 			
-			//common.js
-			//$retContent.=bytesContentWithFileType("../$dir/config/resource/","common.js");
+			//waiting.html
+			$retContent.=bytesContentWithFileType("../$dir/config/resource/","waiting.html");
 			
 			//hotWords.txt
-            $retContent.=bytesContentWithFileType("../$dir/config/resource/","hotWords.txt");
+            //$retContent.=bytesContentWithFileType("../$dir/config/resource/","hotWords.txt");
 		}
 		
 		echo $retContent;
