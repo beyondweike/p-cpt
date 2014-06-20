@@ -61,7 +61,7 @@
 	//add one visit times
 	Visitor::updateVisitTimes($headers);
 	
-	if($version<2.0)
+	if($version<=1.12)
 	{
 		//add one read times
 		Item::addOneReadTimes($articleId,$list_table_name);
