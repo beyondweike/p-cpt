@@ -40,11 +40,36 @@
 	function captureJbxueItemListPage($url,&$pageCount)
 	{
 		$results=fileGetContents( $url );
+		
+		if($results=="")
+		{
+			date_default_timezone_set('Asia/Shanghai');
+			$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
+			log2File($filePathName,"captureJbxueItemListPage fileGetContents empty\n".$url."\n");
+			
+			return "";
+		}
 
         $results=checkConvertHtmlToCharsetUtf8($results);
+		
+		if($results=="")
+		{
+			date_default_timezone_set('Asia/Shanghai');
+			$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
+			log2File($filePathName,"captureJbxueItemListPage checkConvertHtmlToCharsetUtf8 empty\n".$url."\n");
+			
+			return "";
+		}
         
 		$content = preg_match("/<div[^>]+class=\"sub-list\"[^>]*>\s*<ul>([\s\S]*?)<\/ul>/i",$results,$temp) ? $temp[1]:"";
         
+		if($content=="")
+		{
+			date_default_timezone_set('Asia/Shanghai');
+			$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
+			log2File($filePathName,"captureJbxueItemListPage preg_match empty\n".$url."\n");
+		}
+		
         return $content;
 	}
 ?>

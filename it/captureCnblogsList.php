@@ -351,8 +351,24 @@
 	function captureCnblogsListPage($url,&$pageCount)
 	{
 		$results=fileGetContents( $url );
+		
+		if($results=="")
+		{
+			date_default_timezone_set('Asia/Shanghai');
+			$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
+			log2File($filePathName,"captureCnblogsListPage fileGetContents empty\n".$url."\n");
+			
+			return "";
+		}
 
 		$content = preg_match("/<div[^>]+id=\"post_list\"[^>]*>([\s\S]*)<div[^>]+id=\"pager_bottom\"[^>]*>/s",$results,$temp) ? $temp[1]:""; 
+		
+		if($content=="")
+		{
+			date_default_timezone_set('Asia/Shanghai');
+			$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
+			log2File($filePathName,"captureCnblogsListPage preg_match empty\n".$url."\n");
+		}
 		
 		return $content;
 	}
@@ -360,8 +376,23 @@
     function captureCnblogsNewsListPage($url,&$pageCount)
 	{
 		$results=fileGetContents( $url );
+		
+		if($results=="")
+		{
+			date_default_timezone_set('Asia/Shanghai');
+			$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
+			log2File($filePathName,"captureCnblogsListPage fileGetContents empty\n".$url."\n");
+			
+			return "";
+		}
 
 		$content = preg_match("/<div[^>]+id=\"news_list\"[^>]*>([\s\S]*)<div[^>]+id=\"pages\"/i",$results,$temp) ? $temp[1]:"";
+		if($content=="")
+		{
+			date_default_timezone_set('Asia/Shanghai');
+			$filePathName="../logs/captureList_error_".date("Y-m-d",time()).".log";
+			log2File($filePathName,"captureCnblogsListPage preg_match empty\n".$url."\n");
+		}
 		
 		return $content;
 	}
