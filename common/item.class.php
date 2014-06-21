@@ -100,11 +100,11 @@
 			 $result=mysql_query($sql);
 			 if($result)
 			 {
-				if($rows = mysql_fetch_array($result))
+				if($row = mysql_fetch_array($result))
 				{
 					 $exists=true;
-					 $existsId=$rows[0];
-					 $existsCategoryCode=$rows[1];
+					 $existsId=$row[0];
+					 $existsCategoryCode=$row[1];
 				}
 			 }
 			 else
@@ -143,10 +143,10 @@
 					$filePathName="../logs/sql_error_".date("Y-m-d",time()).".log";
 					log2File($filePathName,$sql."\n".mysql_error());
 				 }
-				 else if($rows = mysql_fetch_array($result))
+				 else if($row = mysql_fetch_array($result))
 				 {
-					 $existsId=$rows[0];
-					 $existsCategoryCode=$rows[1];
+					 $existsId=$row[0];
+					 $existsCategoryCode=$row[1];
 					 
 					 $this->id=$existsId;
 					 $this->categoryCode=$existsCategoryCode;
@@ -230,10 +230,10 @@
 				return;
 			}
 			
-			if($rows = mysql_fetch_array($result))
+			if($row = mysql_fetch_array($result))
 			{
-				$id=$rows[0];
-				$tempTagsStr=$rows[1];
+				$id=$row[0];
+				$tempTagsStr=$row[1];
 				
 				$tagsStr=$tempTagsStr;
 				$tempTagArray=explode(',',$tempTagsStr);
@@ -307,9 +307,9 @@
 			$result=mysql_query($sql);
 			if($result)
 			{
-				if($rows = mysql_fetch_array($result))
+				if($row = mysql_fetch_array($result))
 				{
-					$href=$rows[0];
+					$href=$row[0];
 				}
 			}
 			
@@ -374,6 +374,23 @@
 			return $arr;
 		 }
 		 
+		 public static function queryHrefArrayByIds($articleIds,$tableName)
+		 {
+            $arr=NULL;
+			
+			$sql="SELECT href FROM ".$tableName." where id in (".$articleIds.")";
+			$result=mysql_query($sql);
+			if($result)
+			{
+				while($row = mysql_fetch_array($result))
+				{
+					$href=$row[0];
+					$arr[] = $href;
+				}
+			}
+			return $arr;
+		 }
+		 
 		 public static function queryNewestCount($topItemId,$categoryCode,$tableName)
 		 {
             $count=0;
@@ -391,9 +408,9 @@
 			$result=mysql_query($sql);
 			if($result)
 			{
-				if($rows = mysql_fetch_array($result))
+				if($row = mysql_fetch_array($result))
 				{
-					$count=$rows[0];
+					$count=$row[0];
 				}
 			}
 			
@@ -588,9 +605,9 @@
                 $readTimes=1;
                 $sql="SELECT readTimes FROM ".$tableName." where id=".$topItemId;
                 $result=mysql_query($sql);
-                if($rows = mysql_fetch_array($result))
+                if($row = mysql_fetch_array($result))
                 {
-                    $readTimes=$rows[0];
+                    $readTimes=$row[0];
                 }
 				
 				$factor=10000000;
@@ -638,9 +655,9 @@
                 $readTimes=1;
                 $sql="SELECT readTimes FROM ".$tableName." where id=".$lastItemId;
                 $result=mysql_query($sql);
-                if($rows = mysql_fetch_array($result))
+                if($row = mysql_fetch_array($result))
                 {
-                    $readTimes=$rows[0];
+                    $readTimes=$row[0];
                 }
                 
                 //readTimes between 1 and ".$readTimes." and
