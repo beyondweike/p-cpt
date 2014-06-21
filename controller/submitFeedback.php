@@ -67,7 +67,7 @@
     $message="";
     if($ret)
     {
-        $message="感谢您的反馈，我们会继续做的更好。";
+        $message="感谢您的反馈，请等待我们给您回复邮件。";
     }
 
     dbClose($con);
