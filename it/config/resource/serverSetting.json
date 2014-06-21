@@ -3,8 +3,8 @@
 	"showAd":0,"showAdBanner":0,"showAdSpot":0,"showAdWall":0,
 	"encryptKey":"123456",
 	"signature":"",
-	"softRecommend":{"recommendTitle":"《程序员读》精心为程序员打造。",
-    "recommendDesc":"挖掘细致的阅读习惯，\r\n热门开发分类，\r\n在线视频观看，\r\n下载离线阅读，\r\n片段选择分享，\r\n网络收藏摘抄，\r\n二维码快速扫描，\r\n日夜间模式摇一摇轻松切换。","recommendUrl":"http://t.cn/8k1VM8d"},
+	"softRecommend":{"title":"《程序员读》精心为程序员打造。",
+    "desc":"挖掘细致的阅读习惯，\r\n热门开发分类，\r\n在线视频观看，\r\n下载离线阅读，\r\n片段选择分享，\r\n网络收藏摘抄，\r\n二维码快速扫描，\r\n日夜间模式摇一摇轻松切换。","url":"http://t.cn/8k1VM8d"},
 	"shareArticleLink":{"shareArticleLink":1,"shareUriFormatId":"article/id/$id$.html","shareUriFormatUrl":"article/ul/$url$.html"},
 	"localNotification":{"title":"《程序员读》有新的文章了","periodSeconds":604800}
 }
