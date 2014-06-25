@@ -21,6 +21,10 @@
 			{
                 $this->href = $temp[1];
 				$this->title = $temp[2];
+				
+				$find = array("</em>");
+				$this->title=str_ireplace($find,"",$this->title);
+				$this->title=preg_replace("/<em[^>]+>/i", "", $this->title);
 
 				$baseurl = 'http://tech.163.com/';
 				$this->href=format_url($this->href, $baseurl);
