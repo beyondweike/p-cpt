@@ -118,10 +118,10 @@
             $retContent.=bytesContentWithFileType("../$dir/config/resource/","serverSetting.json");
             
             //loading.html
-            $retContent.=bytesContentWithFileType("../$dir/config/resource/","loading.html");
+            //$retContent.=bytesContentWithFileType("../$dir/config/resource/","loading.html");
 			
 			//waiting.html
-			$retContent.=bytesContentWithFileType("../$dir/config/resource/","waiting.html");
+			//$retContent.=bytesContentWithFileType("../$dir/config/resource/","waiting.html");
 			
 			//hotWords.txt
             //$retContent.=bytesContentWithFileType("../$dir/config/resource/","hotWords.txt");
