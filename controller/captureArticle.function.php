@@ -989,7 +989,7 @@
 		
 		if($originName!="" || $originUrl!="")
         {
-			if($originUrl=="")
+			if($originUrl=="" || !isStringStartWith($originUrl,"http"))
 			{
 				$originUrl=$url;
 			}
