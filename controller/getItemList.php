@@ -175,14 +175,6 @@
 	}
 
 	dbClose($con);
-	
-	//for v1.0 列表显示重复临解决时办法
-	$version=$headers["version"];
-	if($version<=1.00 && $pageSize==20)
-	{
-		$pageSize+=1;
-	}
 
 	echo json_encode(array('success'=>true,'pageSize'=>$pageSize,'dataArray'=>$dataArray));
-	
 ?>

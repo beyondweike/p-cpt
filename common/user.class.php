@@ -23,10 +23,27 @@
             $this->deviceId = $row['deviceId'];
 			$this->authority = $row['authority'];
 		}
-
-		 function insertToDatabase()
+			
+		 function insertToDatabase($userId=0)
 		 {
 			//warning. make sure href,title field enough long.   vchar 300
+			
+			if($userId>0)
+			{
+				$exists=false;
+				$sql="SELECT count(*) FROM user_table where id=".$userId;
+
+				$result = mysql_query($sql);
+				if($row = mysql_fetch_array($result))
+				{
+				  $exists=$row[0]>0;
+				}
+	
+				if($exists)
+				{
+					return true;
+				}
+			}			
 			
 			 if($this->registerTime=="")
 			 {
@@ -35,8 +52,19 @@
                  $this->lastUpdateTime=$this->registerTime;
 			 }
 
-             $sql="INSERT INTO user_table (username, password, email, registerTime, lastUpdateTime, deviceId) ".
+			 $sql="";
+			 if($userId>0)
+			 {
+				$this->id=$userId;
+             	$sql="INSERT INTO user_table (id,username, password, email, registerTime, lastUpdateTime, deviceId) ".
+				 " VALUES(".$userId.",'".$this->username."', '".$this->password."', '".$this->email."', '".$this->registerTime."', '".$this->lastUpdateTime."', '".$this->deviceId."')";
+			 }
+			 else
+			 {
+				 $sql="INSERT INTO user_table (username, password, email, registerTime, lastUpdateTime, deviceId) ".
 				 " VALUES('".$this->username."', '".$this->password."', '".$this->email."', '".$this->registerTime."', '".$this->lastUpdateTime."', '".$this->deviceId."')";
+			 }
+				 
              $ret=mysql_query($sql);
 			 
 			 if($ret===false)
@@ -47,7 +75,10 @@
 			 }
              else
 			 {
-             	$this->id=mysql_insert_id();
+				if($this->id<=0)
+				{
+             		$this->id=mysql_insert_id();
+				}
 			 }
 			 
 			 return $ret;

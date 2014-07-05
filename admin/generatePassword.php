@@ -3,7 +3,7 @@
     include_once("../common/file.function.php");
     
 	//$password=decrypt("c300T3LDEJ83D8T+43KfpzYaWPGg02zJzxq5Gbb4ddDCEgcwvi4q11Y","wangweike");
-	$passwordcoded=encrypt("d54fc9c399","wangweike");
+	$passwordcoded=encrypt("a144179e32","wangweike");
 	
 	//echo $password;
 	echo "<br>";

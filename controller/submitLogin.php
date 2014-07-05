@@ -11,6 +11,8 @@
     $headers=getAllHeadersLowerCase();
     $encrypt=$headers["encrypt"];//must use lower case
 	$productCode=$headers["productcode"];//must use lower case
+	$deviceId=$headers["deviceid"];//must use lower case
+	$userId=$headers["userid"];//must use lower case
 	
 	//print_r($headers);
 
@@ -36,7 +38,6 @@
 	}
 
 	$ret=0;
-    $userId=-1;
     $email="";
     $authority=0;
     $message="登录失败";
@@ -68,7 +69,21 @@
         }
         else
         {
-            $message="用户不存在";
+			$user=new User();
+			$user->username=$username;
+			$user->password=$password;
+			$user->deviceId=$deviceId;
+			
+			$ret=$user->insertToDatabase($userId);
+					
+			if($ret)
+			{
+				$message="登录成功";
+			}
+			else
+			{
+            	$message="用户不存在";
+			}
         }
 
         dbClose($con);

@@ -21,11 +21,12 @@
 			//consts
 			$ini_array["local_username"]="root";
 			$ini_array["local_password"]="123456";
-			$ini_array["local_dbname"]="wwk_capture";
+			$ini_array["local_dbname"]="wwk_read";
 			$ini_array["local_dbhost"]="localhost";
 			$ini_array["server_username"]="root";
-			$ini_array["server_password"]="9467PPlCYLLGjXj0MvfpD10SIS6nY2KACwF88H8b9ChWKQf3XayV";
-			$ini_array["server_dbname"]="wwk_capture";
+			//enc("","wangweike");rypt
+			$ini_array["server_password"]="c75e3O70gOfeyue9j8Eo0lpYgUg13oaFUhCQ5jtaNjKB4WHn9fa2";
+			$ini_array["server_dbname"]="wwk_read";
 			$ini_array["server_dbhost"]="localhost";
 			$ini_array["lastEncrypt"]="e10adc3949ba59abbe56e057f20f883e";
 			$ini_array["encrypt"]=    "e10adc3949ba59abbe56e057f20f883e";
