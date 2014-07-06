@@ -4,6 +4,7 @@
     include_once("service.class.php");
     include_once("../common/comment.class.php");
 	include_once("../common/visitor.class.php");
+	include_once("../common/collectItem.class.php");
 	
 	$valide=FALSE;
 	
@@ -53,7 +54,8 @@
 	{
 		$lastItemId=$_GET['lastItemId'];
 
-		$dataArray=Comment::queryMoreHotCommentItem($lastItemId,$pageSize,$service->tableName);
+		////$dataArray=Comment::queryMoreHotCommentItem($lastItemId,$pageSize,$service->tableName);
+		$dataArray=CollectItem::queryMoreHotCollectItem($lastItemId,$pageSize,$service->tableName);
 	}
 	else if (isset($_GET['topItemId']))
 	{
@@ -63,7 +65,8 @@
 		{
 			$pageSize=$pageSize*5;
 		}
-		$dataArray=Comment::queryNewestHotCommentItem($topItemId,$pageSize,$service->tableName);
+		////$dataArray=Comment::queryNewestHotCommentItem($topItemId,$pageSize,$service->tableName);
+		$dataArray=CollectItem::queryNewestHotCollectItem($topItemId,$pageSize,$service->tableName);
 	}
 
 	dbClose($con);
