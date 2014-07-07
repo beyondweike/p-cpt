@@ -25,27 +25,19 @@
 			$valide=TRUE;
 		}
 	}
-    
-    //test
-    //$valide=true;
-    //$productCode=0;
 	
 	if(!$valide)
 	{
 		return NULL;
 	}
 
-	$ret=0;
+	$ret=false;
     $userId=-1;
-	$message="";
+	$message=NULL;
 
 	$username=$_POST['username'];
 	$password=$_POST['password'];
-	$email="";
-	if (isset($_POST['email']))
-	{
-		$email=$_POST['email'];
-	}
+	$email=$_POST['email'];
 	$deviceId=$headers["deviceid"];//must use lower case
 	
 	if(strlen($email)==0)
@@ -58,17 +50,28 @@
 		
 		$maxRegisterCount=4;
 		$registerCount=User::queryUserCountByDeviceId($deviceId);
-		if($registerCount<$maxRegisterCount)
+		if($registerCount>=$maxRegisterCount)
+		{
+			$message="您注册的账号过多";
+		}
+		
+		if(!$message)
 		{
 			$user=User::queryUserByUserName($username);
-			if(!$user)
+			if($user)
 			{
-				if($email!="")
+				$message="用户名已存在";
+			}
+			
+			if(!$message)
+			{
+				$user=User::queryUserByEmail($email);
+				if($user)
 				{
-					$user=User::queryUserByEmail($email);
+					$message="邮箱已存在";
 				}
 				
-				if(!$user)
+				if(!$message)
 				{
 					$user=new User();
 					$user->username=$username;
@@ -80,23 +83,15 @@
 					if($ret)
 					{
 						$userId=$user->id;
+						$message="注册成功";
 					}
-					
-					$message="服务器忙";
+					else
+					{
+						$message="服务器忙";
+					}
 				}
-				else
-				{
-					$message="邮箱已存在";
-				}
+				
 			}
-			else
-			{
-				$message="用户名已存在";
-			}
-		}
-		else
-		{
-			$message="您注册的账号过多";
 		}
 		
 		dbClose($con);

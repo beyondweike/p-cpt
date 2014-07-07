@@ -25,53 +25,70 @@
 			$valide=TRUE;
 		}
 	}
-    
-    //test
-    //$valide=true;
-    //$productCode=0;
 	
 	if(!$valide)
 	{
 		return NULL;
 	}
 
-	$ret=0;
-	$message="";
+	$ret=false;
+	$message=NULL;
 
-	if (isset($_POST['userId']))
+	$userId=$_POST['userId'];
+	$oldPassword=$_POST['oldPassword'];
+	$password=$_POST['password'];
+	$email=$_POST['email'];
+	$username=NULL;
+	if(isset($_POST['username']))
 	{
-        $userId=$_POST['userId'];
-        $oldPassword=$_POST['oldPassword'];
-        $password=$_POST['password'];
-        $email="";
-        if (isset($_POST['email']))
-        {
-            $email=$_POST['email'];
-        }
-
+		$username=$_POST['username'];
+	}
+	
+	if(strlen($email)==0)
+	{
+		$message="邮箱不能为空";
+	}
+	else
+	{
         $con=dbConnect();
 
         $user=User::queryUser($userId);
         if(!$user)
         {
-            $message="用户不存在";
+			if($username)
+			{
+				$user=new User();
+				$user->username=$username;
+				$user->password=$password;
+				$user->email=$email;
+				$user->deviceId=$deviceId;
+				
+				$ret=$user->insertToDatabase();
+				if($ret)
+				{
+					$userId=$user->id;
+					$message="资料修改成功";
+				}
+				else
+				{
+					$message="服务器忙";
+				}
+			}
+			else
+			{
+				$message="用户不存在";
+			}
         }
-        else
-        {
+        
+		if(!$message)
+		{
             if($user->password!=$oldPassword)
             {
                 $message="原密码错误";
             }
-            else
-            {
-                if (isset($_POST['email']))
-                {
-                    $email=$_POST['email'];
-					if(strlen($email)>0)
-					{
-						$user->email=$email;
-					}
-                }
+            
+			if(!$message)
+			{
                 $user->email=$email;
                 $user->password=$password;
                 

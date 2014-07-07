@@ -27,10 +27,6 @@
 			$valide=TRUE;
 		}
 	}
-    
-    //test
-    //$valide=true;
-    //$productCode=0;
 	
 	if(!$valide)
 	{
@@ -42,52 +38,53 @@
     $authority=0;
     $message="登录失败";
     
-	if (isset($_POST['username']))
+	$username=$_POST['username'];
+	$password=$_POST['password'];
+	if($userId<=0)
 	{
-        $username=$_POST['username'];
-        $password=$_POST['password'];
-        
-        $con=dbConnect();
-        
-        $user=User::queryUserByUserName($username);
-        if($user)
-        {
-            if($user->password===$password)
-            {
-                $ret=1;
-                
-                $userId=$user->id;
-                $email=$user->email;
-                $authority=$user->authority;
-                
-                $message="登录成功";
-            }
-            else
-            {
-                $message="密码错误";
-            }
-        }
-        else
-        {
-			$user=new User();
-			$user->username=$username;
-			$user->password=$password;
-			$user->deviceId=$deviceId;
+		$userId=$_POST['userId'];
+	}
+	
+	$con=dbConnect();
+	
+	$user=User::queryUserByUserName($username);
+	if($user)
+	{
+		if($user->password===$password)
+		{
+			$ret=true;
 			
-			$ret=$user->insertToDatabase($userId);
-					
-			if($ret)
-			{
-				$message="登录成功";
-			}
-			else
-			{
-            	$message="用户不存在";
-			}
-        }
+			$userId=$user->id;
+			$email=$user->email;
+			$authority=$user->authority;
+			
+			$message="登录成功";
+		}
+		else
+		{
+			$message="密码错误";
+		}
+	}
+	else
+	{
+		$user=new User();
+		$user->username=$username;
+		$user->password=$password;
+		$user->deviceId=$deviceId;
+		
+		$ret=$user->insertToDatabase($userId);
+				
+		if($ret)
+		{
+			$message="登录成功";
+		}
+		else
+		{
+			$message="用户不存在";
+		}
+	}
 
-        dbClose($con);
-    }
+	dbClose($con);
 
 	echo json_encode(array('success'=>$ret,'message'=>$message,'userId'=>intval($userId),'email'=>$email,'authority'=>intval($authority)));
 ?>
