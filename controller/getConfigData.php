@@ -115,7 +115,7 @@
             //$retContent.=bytesContentWithFileType("../$dir/config/resource/","categories.json");
 			
 			//serverSetting.json
-            $retContent.=bytesContentWithFileType("../$dir/config/resource/","serverSetting.json");
+            //$retContent.=bytesContentWithFileType("../$dir/config/resource/","serverSetting.json");
             
             //loading.html
             //$retContent.=bytesContentWithFileType("../$dir/config/resource/","loading.html");
@@ -123,8 +123,8 @@
 			//waiting.html
 			//$retContent.=bytesContentWithFileType("../$dir/config/resource/","waiting.html");
 			
-			//hotWords.txt
-            //$retContent.=bytesContentWithFileType("../$dir/config/resource/","hotWords.txt");
+			//frame.html
+            $retContent.=bytesContentWithFileType("../$dir/config/resource/","frame.html");
 		}
 		
 		echo $retContent;
