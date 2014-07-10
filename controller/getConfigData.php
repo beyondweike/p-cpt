@@ -115,7 +115,7 @@
             //$retContent.=bytesContentWithFileType("../$dir/config/resource/","categories.json");
 			
 			//serverSetting.json
-            //$retContent.=bytesContentWithFileType("../$dir/config/resource/","serverSetting.json");
+            $retContent.=bytesContentWithFileType("../$dir/config/resource/","serverSetting.json");
             
             //loading.html
             //$retContent.=bytesContentWithFileType("../$dir/config/resource/","loading.html");
@@ -124,7 +124,7 @@
 			//$retContent.=bytesContentWithFileType("../$dir/config/resource/","waiting.html");
 			
 			//frame.html
-            $retContent.=bytesContentWithFileType("../$dir/config/resource/","frame.html");
+            //$retContent.=bytesContentWithFileType("../$dir/config/resource/","frame.html");
 		}
 		
 		echo $retContent;
