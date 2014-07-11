@@ -88,7 +88,7 @@
 		if($version<=1.0)
 		{
             //if($visitTimes<=1)// && $visitTimes<=20 卸载后再安装，visitTimes继续,所以等1.0后面的版本在客户端要记录启动次数。
-            $retContent.=bytesContentWithFilePath("../$dir/config/resource/","resource.zip");
+            //$retContent.=bytesContentWithFilePath("../$dir/config/resource/","resource.zip");
             
             //hotWords.txt
 			//$retContent.=bytesContentWithFilePath("../$dir/config/resource/","hotWords.txt");
