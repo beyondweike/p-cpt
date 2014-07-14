@@ -1,6 +1,6 @@
 {
 	"articleCountPerDownloadRequest":2,
-	"showAd":1,"showAdBanner":0,"showAdSpot":1,"showAdWall":1,
+	"showAd":1,"showAdBanner":1,"showAdSpot":1,"showAdWall":1,
 	"encryptKey":"123456",
 	"signature":"",
 	"softRecommend":{"title":"《程序员读》精心为程序员打造。",
