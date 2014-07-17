@@ -18,7 +18,7 @@
         
 		$find = array(":","/","?");
 		$fileName=str_ireplace($find,"_",$url);
-		$filePathName="../articles/".$fileName.".txt";
+		$filePathName="../../../mobile/read/articles/".$fileName.".txt";
 		
 		return $filePathName;
 	}
@@ -29,7 +29,7 @@
         
 		$find = array(":","/","?");
 		$fileName=str_ireplace($find,"_",$url);
-		$filePathName="../articles/".$fileName.".txt";
+		$filePathName="../../../mobile/read/articles/".$fileName.".txt";
 
 		$content="";
 		
