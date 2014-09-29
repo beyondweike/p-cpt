@@ -1,5 +1,5 @@
 {
-    "version":1.21,
+    "version":1.30,
  	"resourceVersion":1.0,
-	"softUpdate":{"showAlert":0,"title":"有新版本v1.21","message":"1.优化界面操作体验;\r\n2.修正bug增强稳定;"}
+	"softUpdate":{"showAlert":1,"title":"有新版本v1.30","message":"1.增加文章内查看列表功能；\r\n2.增加积分功能；\r\n3.修正bug优化体验；"}
 }
