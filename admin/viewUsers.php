@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+
 <?php
     include_once("../common/user.class.php");
 	include_once("../controller/db.function.php");
